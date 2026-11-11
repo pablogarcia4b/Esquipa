@@ -1,0 +1,24 @@
+name: Calculadora
+options:
+  bundleIdPrefix: com.esquipa
+  deploymentTarget:
+    iOS: "15.0"
+targets:
+  Calculadora:
+    type: application
+    platform: iOS
+    sources:
+      - Calculadora
+    info:
+      path: Calculadora/Info.plist
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.esquipa.calculadora
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        MARKETING_VERSION: 1.0.0
+        CURRENT_PROJECT_VERSION: 1
+        SWIFT_VERSION: 5.0
+        TARGETED_DEVICE_FAMILY: "1"
+        CODE_SIGNING_ALLOWED: NO
+        CODE_SIGNING_REQUIRED: NO
+        CODE_SIGN_IDENTITY: ""
