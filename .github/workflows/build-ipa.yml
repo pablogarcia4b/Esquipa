@@ -1,0 +1,46 @@
+name: Compilar Calculadora IPA para iPhone
+
+on:
+  push:
+    branches: [ "*" ]
+  workflow_dispatch:
+
+jobs:
+  build-ipa:
+    runs-on: macos-latest
+    steps:
+      - name: Descargar codigo
+        uses: actions/checkout@v4
+
+      - name: Generar proyecto Xcode (XcodeGen)
+        working-directory: ios-ipa
+        run: |
+          brew install xcodegen
+          xcodegen generate
+
+      - name: Compilar aplicacion iOS (arm64)
+        working-directory: ios-ipa
+        run: |
+          xcodebuild -project Calculadora.xcodeproj \
+            -scheme Calculadora \
+            -configuration Release \
+            -sdk iphoneos \
+            -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY="" \
+            AD_HOC_CODE_SIGNING_ALLOWED=YES
+
+      - name: Empaquetar archivo Calculadora.ipa
+        working-directory: ios-ipa
+        run: |
+          mkdir -p Payload
+          cp -r build/Build/Products/Release-iphoneos/Calculadora.app Payload/
+          zip -r9 Calculadora.ipa Payload
+
+      - name: Subir Calculadora.ipa listo para descargar
+        uses: actions/upload-artifact@v4
+        with:
+          name: Calculadora-iPhone-IPA
+          path: ios-ipa/Calculadora.ipa
+          if-no-files-found: error
